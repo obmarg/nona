@@ -1,6 +1,6 @@
 # nona
 
-FIXME: description
+nona is a static website generation tool, written in clojure.
 
 ## Installation
 
@@ -30,6 +30,6 @@ FIXME: listing of options this app accepts.
 
 ## License
 
-Copyright © 2012 FIXME
+Copyright © 2012 Graeme Coupar
 
 Distributed under the Eclipse Public License, the same as Clojure.
