@@ -1,17 +1,19 @@
-(ns nona.core
+
+(ns nona.files
   (:require [clojure.java.io :as io])
   )
 
-(defn- source-file
+(defn- load-source-file
   [file]
   (if-not (.isDirectory file)
-    {:name (.getName file) :path (.getPath file) :data "something"}
-    ; TODO: Make data a future that gets the files data
+    {:name (.getName file) :path (.getPath file) :data (slurp file)}
     ))
 
-(defn source-files
-  "Creates a list of "
-  [dir] (set (remove nil? (map source-file (file-seq (io/file dir)))))
-  ; TODO: Decide if a set is the best format.  Map of filenames -> data
-  ;       could work better
-  )
+(def load-source-files
+  (comp
+    set
+    (partial remove nil?)
+    (partial map load-source-file)
+    file-seq
+    io/file)
+    )
