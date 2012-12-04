@@ -4,15 +4,23 @@
 
 (def defaults
   {:templates-dir "templates"
-   :output-dir "output"}
+   :output-dir "output"
+   :default-layout "page"}
   )
 
 (defonce config (atom defaults))
 
+(defn load-config
+  "Loads the configuration for nona from a specified file"
+  [filename]
+  (swap! config merge (read-string (slurp filename)))
+  )
+
 (defn get-config
-  "Gets the configuration for nona"
-  []
-  (swap! config merge (read-string (slurp "conf.clj")))
+  "Gets the value of a config setting"
+  [setting]
+  (@config setting)
+  ; TODO: Maybe want to except if setting isn't set...
   )
 
 (defn set-config

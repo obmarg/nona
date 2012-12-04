@@ -33,7 +33,8 @@
 (defn render-page
   "Takes a page, returns a rendered string"
   [{:keys [data metadata] :as page}]
-  (let [template (get-template (:layout metadata))]
+  (let [layout (:layout metadata (config/get-config :default-layout))
+        template (get-template layout)]
     (->>
      data
      md-to-html-string
