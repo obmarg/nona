@@ -9,9 +9,9 @@
   [filename]
   (html/template 
    filename
-   [info]
-   [:#title] (html/content (:name info))
-   [:#content] (html/html-content (:content info))
+   [page]
+   [:#title] (html/content (:name page))
+   [:#content] (html/html-content (:content page))
    ))
 
 (def ^:private templates (atom {}))

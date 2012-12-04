@@ -2,13 +2,13 @@
   (:require [clojure.java.io :as io])
   )
 
-(def defaults
+(def ^:private defaults
   {:templates-dir "templates"
    :output-dir "output"
    :default-layout "page"}
   )
 
-(defonce config (atom defaults))
+(defonce ^:private config (atom defaults))
 
 (defn load-config
   "Loads the configuration for nona from a specified file"
