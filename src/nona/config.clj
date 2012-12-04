@@ -1,11 +1,27 @@
-(ns nona.config)
+(ns nona.config
+  (:require [clojure.java.io :as io])
+  )
 
 (def defaults
-  {:templates-dir "templates"}
+  {:templates-dir "templates"
+   :output-dir "output"}
   )
+
+(defonce config (atom defaults))
 
 (defn get-config
   "Gets the configuration for nona"
   []
-  (merge defaults (read-string (slurp "conf.clj")))
+  (swap! config merge (read-string (slurp "conf.clj")))
+  )
+
+(defn set-config
+  "Sets configuration values.  Mostly for REPL use"
+  [new-config]
+  (swap! config merge new-config)
+  )
+
+(defn get-template-file
+  [layout-name]
+  (io/file (:templates-dir @config) (str layout-name ".html"))
   )
