@@ -5,6 +5,23 @@
         [nona.config :only (get-config)])
   )
 
+(declare create-template get-template)
+
+(def ^:private templates (atom {}))
+
+(defn render-page
+  "Takes a page, returns a rendered string"
+  [{:keys [data metadata] :as page}]
+  (let [layout (:layout metadata (get-config :default-layout))
+        template (get-template layout)]
+    (->>
+     data
+     md-to-html-string
+     (assoc page :content)
+     template
+     (apply str)
+     )))
+
 (defn- create-template
   "Creates a template function from a filename"
   [filename]
@@ -14,8 +31,6 @@
    [:#title] (html/content (:name page))
    [:#content] (html/html-content (:content page))
    ))
-
-(def ^:private templates (atom {}))
 
 (defn- get-template
   "Gets a named template, loading if required"
@@ -30,16 +45,3 @@
         template
         ))
     ))
-
-(defn render-page
-  "Takes a page, returns a rendered string"
-  [{:keys [data metadata] :as page}]
-  (let [layout (:layout metadata (get-config :default-layout))
-        template (get-template layout)]
-    (->>
-     data
-     md-to-html-string
-     (assoc page :content)
-     template
-     (apply str)
-     )))
