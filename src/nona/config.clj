@@ -1,11 +1,11 @@
 (ns nona.config
-  (:require [clojure.java.io :as io])
   )
 
 (def ^:private defaults
   {:templates-dir "templates"
    :output-dir "output"
-   :default-layout "page"}
+   :default-layout "page"
+   :dest-dir "out"}
   )
 
 (defonce ^:private config (atom defaults))
@@ -25,11 +25,6 @@
 
 (defn set-config
   "Sets configuration values.  Mostly for REPL use"
-  [new-config]
-  (swap! config merge new-config)
-  )
-
-(defn get-template-file
-  [layout-name]
-  (io/file (:templates-dir @config) (str layout-name ".html"))
+  ([new-config-map] (swap! config merge new-config-map))
+  ([key value] (swap! config assoc key value))
   )

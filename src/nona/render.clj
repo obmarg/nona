@@ -1,7 +1,8 @@
 (ns nona.render
   (:require [net.cgrand.enlive-html :as html]
-            [nona.config :as config])
-  (:use [markdown.core :only (md-to-html-string)])
+            [nona.files :as files])
+  (:use [markdown.core :only (md-to-html-string)]
+        [nona.config :only (get-config)])
   )
 
 (defn- create-template
@@ -24,7 +25,7 @@
       template
       (let
         [template (create-template 
-                   (config/get-template-file name))]
+                   (files/get-template-file name))]
         (swap! templates assoc name template)
         template
         ))
@@ -33,7 +34,7 @@
 (defn render-page
   "Takes a page, returns a rendered string"
   [{:keys [data metadata] :as page}]
-  (let [layout (:layout metadata (config/get-config :default-layout))
+  (let [layout (:layout metadata (get-config :default-layout))
         template (get-template layout)]
     (->>
      data

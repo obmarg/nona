@@ -1,6 +1,18 @@
 (ns nona.files
   (:require [clojure.java.io :as io]
             [clj-yaml.core :as yaml])
+  (:use 	[nona.config :only (get-config)])
+  )
+
+(defn localFile
+  "Wrapper around io/file that takes relative paths"
+  [& args]
+  (apply io/file (get-config :baseDir) args))
+
+
+(defn get-template-file
+  [layout-name]
+  (localFile (get-config :templates-dir) (str layout-name ".html"))
   )
 
 (defn- split-data
@@ -50,11 +62,19 @@
 (defn load-source-files
   [path]
   (->> path
-       io/file
+       localFile
        file-seq
        (map load-source-file)
        (remove nil?)
-       (map (partial add-dest-path path))
+       (map (partial add-dest-path (localFile path)))
        (map split-data)
        set
        ))
+
+(defn save-dest-file
+  [name content]
+  (let [dest-dir (get-config :dest-dir)
+        dest-file (localFile dest-dir name)]
+  	(io/make-parents dest-file)
+  	(spit dest-file content)
+  	))
