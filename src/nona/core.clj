@@ -11,7 +11,7 @@
 (defn -main
   "I don't do a whole lot ... yet."
   [basefolder & args]
-  (set-config :baseDir basefolder)
+  (set-config :base-dir basefolder)
   (load-config (str basefolder "/config.clj"))
   (doseq
     [page (load-source-files "pages")]
