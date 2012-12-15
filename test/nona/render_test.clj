@@ -26,7 +26,9 @@
 
 (def test-page
   {:name "Nona"
-   :content "Something"})
+   :content "Something"
+   :metadata {:layout "layout"}
+   })
 
 (def test-layouts
   {:one {:template "template.html"
@@ -50,3 +52,37 @@
 
 ; TODO: Write tests of render-page
 
+(fact
+  "get-page-data should handle page.content"
+  (@#'nona.render/get-page-data test-page [:page :content]) => '("Something")
+  )
+
+(fact
+  "get-page-data should handle page.layout"
+  (@#'nona.render/get-page-data test-page [:page :layout]) => "layout"
+  )
+
+(fact
+  "get-page-data should return empty string for missing data"
+  (@#'nona.render/get-page-data test-page [:page :something]) => ""
+  )
+
+(fact
+  "get-page-data should return empty string for non page data"
+  (@#'nona.render/get-page-data test-page [:something :layout]) => ""
+  )
+
+(defn page-data-fn 
+  "An empty function to mock out"
+  [keywords])
+
+(def test-node {:attrs {:data-text "first.second"}})
+
+(fact
+  "handle-data-text should split out keywords and return page data"
+  (let [f (@#'nona.render/handle-data-text #'page-data-fn)]
+    (f test-node) => (assoc test-node :content "woo")
+    )
+  (provided
+    (page-data-fn [:first :second]) => "woo"
+    ))

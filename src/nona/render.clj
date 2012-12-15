@@ -1,7 +1,8 @@
 (ns nona.render
   (:require [net.cgrand.enlive-html :as html]
             [nona.files :as files])
-  (:use [markdown.core :only (md-to-html-string)]
+  (:use [clojure.string :only (split)]
+        [markdown.core :only (md-to-html-string)]
         [nona.config :only (get-config get-layout)])
   )
 
@@ -30,6 +31,8 @@
   create-template 
   create-snippet
   attr-match
+  handle-data-text
+  get-page-data
   )
 
 (defn create-templates
@@ -58,8 +61,30 @@
   [template selector]
   (html/snippet template [selector]
     [item]
-    ; TODO: Replace this stuff with actual selectors.
-    [:.content] (html/html-content (:content item))
+    [(html/attr? :data-text)] (handle-data-text (partial get-page-data item))
+    ))
+
+(defn- handle-data-text
+  "Returns a function that handles elements with data-text attribs
+   page-data should be a function that accepts a seq of keywords"
+  [page-data]
+  (fn [node]
+    (let [data-text (first (html/attr-values node :data-text))
+          keywords (vec (map keyword (split data-text #"\.")))]
+      (assoc node :content (page-data keywords))
+      )))
+
+(defn- get-page-data
+  "Function that gets data from a page using some keywords"
+  [page keywords]
+  (cond 
+    (= (take 2 keywords) [:page :content]) (html/html-snippet (:content page))
+    (= (first keywords) :page) (get-in 
+                                 page 
+                                 (cons :metadata (subvec keywords 1))
+                                 ""
+                                 )
+    :else ""
     ))
 
 (defn- attr-match
