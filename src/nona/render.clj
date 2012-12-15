@@ -10,20 +10,17 @@
   get-template 
   )
 
-(def ^:private templates (atom {}))
-
 (defn render-page
   "Takes a page, returns a rendered string"
-  [page]
-  (let [layout (get-in page [:metadata :layout] (get-config :default-layout))]
+  [templates page]
+  (let [layout (get-in page [:metadata :layout] (get-config :default-layout))
+        template (templates layout)]
     (->> page
          transform-data
          (assoc page :content)
-         ((get-template layout))
+         template
          (apply str)
          )))
-    ;(assoc page :content (transform-data page))
-    ;(apply str ((get-template layout) page))
 
 ;
 ; Templating functions
@@ -35,19 +32,12 @@
   attr-match
   )
 
-(defn- get-template
-  "Gets a named template, loading if required"
-  [name]
-  (let [template (@templates name)]
-    (if template
-      template
-      (let
-        [template (create-template 
-                   (get-layout name))]
-        (swap! templates assoc name template)
-        template
-        ))
-    ))
+(defn create-templates
+  "Function that creates templates from layouts
+   Returns a map of layout-name -> template"
+  [layouts]
+  (zipmap (keys layouts) (map create-template (vals layouts)))
+  )
 
 (defn- create-template
   "Creates a template function for a single page from a layout"
@@ -82,12 +72,6 @@
           matches (map #(re-matches regexp %) attrs)]
       (true? (some matches))
       ))))
-
-;
-; Utility macros to use inplace of enlive snippet & template
-; These accept already loaded html files (via html/html-resource)
-; rather than needing file names
-;
 
 ; 
 ; Rendering functions
