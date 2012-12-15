@@ -1,5 +1,4 @@
-(ns nona.config
-  )
+(ns nona.config)
 
 (def ^:private defaults
   {:templates-dir "templates"
@@ -27,4 +26,10 @@
   "Sets configuration values.  Mostly for REPL use"
   ([new-config-map] (swap! config merge new-config-map))
   ([key value] (swap! config assoc key value))
+  )
+
+(defn get-layout
+  "Gets details of a layout from the config"
+  [name]
+  ((get-config :layouts) name)
   )

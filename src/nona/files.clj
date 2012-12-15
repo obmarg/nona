@@ -31,11 +31,11 @@
       )))
 
 (defn get-template-file
-  [layout-name]
+  [filename]
   (fs/file 
    (get-config :base-dir) 
    (get-config :templates-dir) 
-   (str layout-name ".html"))
+   filename)
   )
 
 (defn- load-source-file
