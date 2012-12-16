@@ -52,25 +52,30 @@
 
 ; TODO: Write tests of render-page
 
+;
+; get-page-data tests
+;
+
 (fact
   "get-page-data should handle page.content"
   (@#'nona.render/get-page-data test-page [:page :content]) => '("Something")
   )
-
 (fact
   "get-page-data should handle page.layout"
   (@#'nona.render/get-page-data test-page [:page :layout]) => "layout"
   )
-
 (fact
   "get-page-data should return empty string for missing data"
   (@#'nona.render/get-page-data test-page [:page :something]) => ""
   )
-
 (fact
   "get-page-data should return empty string for non page data"
   (@#'nona.render/get-page-data test-page [:something :layout]) => ""
   )
+
+;
+; handle-data-text tests
+;
 
 (defn page-data-fn 
   "An empty function to mock out"
@@ -86,3 +91,43 @@
   (provided
     (page-data-fn [:first :second]) => "woo"
     ))
+
+;
+; attr-matches tests
+;
+
+(fact
+  "attr-matches returns empty if no attrs"
+  (@#'nona.render/attr-matches #"" {}) => ()
+  )
+(fact
+  "attr-matches returns empty if no attrs"
+  (@#'nona.render/attr-matches #"" {:attrs {}}) => ()
+  )
+(fact
+  "attr-matches returns empty if no matching attrs"
+  (@#'nona.render/attr-matches #"" {:attrs {:something ""}}) => ()
+  )
+(fact
+  "attr-matches returns list of matching attrs"
+  (@#'nona.render/attr-matches 
+       #"^data-.*"
+       {:attrs {:data-x "" :data-y "" :link ""}}) => '(:data-y :data-x)
+  )
+(fact
+  "attr-matches rejects non-regexp arguments"
+  (@#'nona.render/attr-matches "" {}) => (throws java.lang.AssertionError)
+  )
+
+;
+; split-keywords tests
+;
+
+(fact
+  "split-keywords returns a vector of keywords"
+  (@#'nona.render/split-keywords "one.two.three") => [:one :two :three]
+  )
+(fact
+  "split-keywords returns a vector of one keyword if no dots"
+  (@#'nona.render/split-keywords "one") => [:one]
+  )
