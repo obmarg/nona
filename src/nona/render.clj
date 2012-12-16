@@ -2,7 +2,6 @@
   (:require [net.cgrand.enlive-html :as html]
             [nona.files :as files])
   (:use [clojure.string :only (split)]
-        [markdown.core :only (md-to-html-string)]
         [nona.config :only (get-config get-layout)])
   )
 
@@ -11,6 +10,7 @@
   get-template 
   )
 
+; TODO: Need to strip out transform-data from here
 (defn render-page
   "Takes a page, returns a rendered string"
   [templates page]
@@ -148,18 +148,3 @@
     (seq (attr-matches regexp element))
     )))
 
-; 
-; Rendering functions
-;
-
-(defmulti ^:private transform-data
-  "Does the transform for a page"
-  (fn [page] (:ext page)))
-
-(defmethod transform-data ".md"
-  [page]
-  (md-to-html-string (:data page)))
-
-(defmethod transform-data ".html"
-  [page]
-  (:data page))

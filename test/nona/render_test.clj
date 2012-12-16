@@ -2,6 +2,8 @@
   (:require nona.files)
   (:use midje.sweet
         nona.render))
+; TODO: check if using nona.files rather than requiring
+;       fixes my mocking problems...
 
 (fact "create-templates returns several templates"
       (create-templates

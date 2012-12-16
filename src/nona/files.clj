@@ -1,6 +1,5 @@
 (ns nona.files
   (:require [clojure.java.io :as io]
-            [clj-yaml.core :as yaml]
             [fs.core :as fs])
   (:use 	[nona.config :only (get-config)])
   )
@@ -45,6 +44,7 @@
         dest-path (io/file (fs/parent rel-path) (str name ".html"))
         file-data (slurp file)
         [metadata data] (split-data file-data)]
+    ; TODO: Need to remove all this stuff and have it map to nona.posts
     {:name name 
      :ext extension
      :src-path (relative-path file)
@@ -54,14 +54,7 @@
      }
    ))
 
-(defn- split-data
-  "Takes the contents of a file and splits it into metadata & data"
-  [data]
-  (if-let [[_ header body] (re-find #"(?ms)---(.*?)---(.*)" data)]
-    [(yaml/parse-string header) body]
-    [nil data]))
-
-(defn- relative-path
+(defn relative-path
   "Calculates a relative path"
   ([path] (relative-path fs/*cwd* path))
   ([base path]
