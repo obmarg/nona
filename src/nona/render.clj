@@ -10,6 +10,19 @@
   get-template 
   )
 
+(defn make-template-context
+  "Takes some variables, and makes a context suitable for passing in to a
+   template"
+  [config indexes page posts]
+  ; TODO: could probably put some preconditions on this function
+  ; TODO: also want to decide on the argument list, not sure this is
+  ;       the best...
+  {:config config
+   :indexes indexes
+   :page page
+   :posts posts}
+  )
+
 ; TODO: Need to strip out transform-data from here
 (defn render-page
   "Takes a page, returns a rendered string"
