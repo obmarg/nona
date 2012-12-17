@@ -1,6 +1,8 @@
 (ns nona.render
   (:require [net.cgrand.enlive-html :as html]
-            [nona.files :as files])
+            [nona.files :as files]
+            [clojure.tools.logging :as log]
+            )
   (:use [clojure.string :only (split)]
         [nona.config :only (get-config get-layout)])
   )

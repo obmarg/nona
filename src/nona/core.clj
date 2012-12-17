@@ -1,21 +1,36 @@
 (ns nona.core
-  (:use (nona
-          [config :only (load-config set-config get-config)]
-          [render :only (render create-templates make-template-context)]
-          [files :only (load-source-files save-dest-file)]
-          [posts :only (get-dest-path get-render-context make-post) :as posts]
-          [utils]
-          ))
+  (:use
+    clj-logging-config.log4j
+    (nona
+      [config :only (load-config set-config get-config)]
+      [render :only (render create-templates make-template-context)]
+      [files :only (load-source-files save-dest-file)]
+      [posts :only (get-dest-path get-render-context make-post) :as posts]
+      [utils]
+      ))
   (:require [clojure.string :as string]
             [clojure.java.io]
+            [clojure.tools.logging :as log]
             )
   (:gen-class))
+
+(def logging-started (atom false))
+
+(defn stdout-logging
+  "Function that starts logging to stdout.  Useful for using the repl"
+  ([level]
+   (set-logger! :level level :out (fn [ev] (println (:message ev))))
+   (reset! logging-started true))
+  ([] (stdout-logging :debug)))
 
 (declare page-from-post)
 
 (defn -main
   "I don't do a whole lot ... yet."
   [basefolder & args]
+  (if (not @logging-started) (do
+                               (set-logger!)
+                               (reset! logging-started true)))
   (set-config :base-dir basefolder)
   (load-config (str basefolder "/config.clj"))
   (let [templates (create-templates (get-config :layouts))
@@ -23,13 +38,13 @@
         pages (map page-from-post posts)
         make-context (partial make-template-context {} {})
         get-template #(templates (:layout %1))]
-    (print "posts " posts "\n")
+    (log/debug "posts " posts "\n")
     (doseq
       ; TODO: Update this to use new posts system
       ;       and generate indexes etc.
       [page pages]
-      (print "Outputting " (:title page) 
-             " to " (:dest-path page) 
+      (log/debug "Outputting " (:title page)
+             " to " (:dest-path page)
              " using layout " (:layout page)
              "\n")
       (save-dest-file (:dest-path page) (->> page
@@ -37,12 +52,12 @@
                                              (render (get-template page))
                                              ))
       ))
-  (println "Done!"))
+  (log/info "Done!"))
 
 (def default-indexes
   ; TODO: Need to add templates to this also
   ;       Probably want something to generate output filenames too
-  ;       Though might be able to use grouping etc. to do that 
+  ;       Though might be able to use grouping etc. to do that
   ;       automatically
   {:index       {:title ""
                  :path ""
@@ -89,7 +104,7 @@
   [index group posts]
   {:dest-path (str (clojure.java.io/file (:path index) (or group "") "index.html"))
    ; TODO: may need to add in sitewide title here
-   :title (string/replace (:title index) "%s" (str group)) 
+   :title (string/replace (:title index) "%s" (str group))
    :posts (map posts/get-render-context posts)
    :layout (:layout index)
    })

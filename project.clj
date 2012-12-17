@@ -8,6 +8,7 @@
                  [markdown-clj "0.9.11"]
                  [enlive "1.0.0"]
                  [clj-yaml "0.4.0"]
-                 [fs "1.3.2"]]
+                 [fs "1.3.2"]
+                 [clj-logging-config "1.9.10"]]
   :profiles {:dev {:dependencies [[midje "1.4.0"]]}}
   :main nona.core)
