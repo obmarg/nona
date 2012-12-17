@@ -23,7 +23,25 @@
    (reset! logging-started true))
   ([] (stdout-logging :debug)))
 
-(declare page-from-post)
+(declare page-from-post gen-index-pages default-indexes)
+
+(defn get-posts
+  "Loads source files and makes posts from them"
+  []
+  (map #(apply make-post %1) (load-source-files "pages"))
+  )
+
+(defn get-templates
+  "Loads layouts from config & creates templates"
+  []
+  (create-templates (get-config :layouts))
+  )
+
+(defn gen-indexes
+  "Generates all the default indexes using post data"
+  [posts]
+  (mapcat #(gen-index-pages (second %1) posts) default-indexes)
+  )
 
 (defn -main
   [basefolder & args]
@@ -32,15 +50,13 @@
                                (reset! logging-started true)))
   (set-config :base-dir basefolder)
   (load-config (str basefolder "/config.clj"))
-  (let [templates (create-templates (get-config :layouts))
-        posts (map #(apply make-post %1) (load-source-files "pages"))
-        pages (map page-from-post posts)
+  (let [templates (get-templates)
+        posts (get-posts)
+        pages (concat (map page-from-post posts) (gen-indexes posts))
         make-context (partial make-template-context {} {})
         get-template #(templates (:layout %1))]
     (log/debug "posts " posts "\n")
     (doseq
-      ; TODO: Update this to use new posts system
-      ;       and generate indexes etc.
       [page pages]
       (log/debug "Outputting " (:title page)
              " to " (:dest-path page)
@@ -49,36 +65,31 @@
       (save-dest-file (:dest-path page) (->> page
                                              make-context
                                              (render (get-template page))
-                                             ))
-      ))
+                                             ))))
   (log/info "Done!"))
 
 (def default-indexes
-  ; TODO: Need to add templates to this also
-  ;       Probably want something to generate output filenames too
-  ;       Though might be able to use grouping etc. to do that
-  ;       automatically
   {:index       {:title ""
                  :path ""
                  :page-grouping nil
                  :order :date
                  :limit 10
                  :max-pages 1
-                 :layout ""}
+                 :layout "page"}
    :archives    {:title "Blog Archive"
                  :path "/blog/archive/"
                  :page-grouping nil
                  :order :date
                  :limit nil
                  :max-pages nil
-                 :layout ""}
+                 :layout "page"}
    :categories  {:title "Category: %s"
                  :path "/blog/categories/"
                  :page-grouping :categories
                  :order :date
                  :limit nil
                  :max-pages nil
-                 :layout ""}
+                 :layout "page"}
    })
 
 (declare index-page)
@@ -87,21 +98,33 @@
   ; TODO: Could maybe rename this generate-index and have it return data/call
   ; another function.  Might be useful if we need index data elsewhere (which
   ; I think we will)
+  ; Also think that the arguments might be better the other way around...
   "This function takes an index definition and some posts and generates index
    pages"
   [index posts]
   ; First, we group, sort & split data according to the input parameters.
-  (let [groups (group-by-single-key
-                 #(get-in % [:metadata (:page-grouping index)]) posts)]
-      (for [[group posts] groups]
-        (index-page index group (sort-by (:order index) posts))
-        )))
+  (let [group-key (:page-grouping index)
+        groups (group-by-single-key
+                 #(get-in % [:metadata group-key]) posts)]
+        ;TODO: Maybe want to split each group at this point based on limit
+        ;      and mas-pages (partition is probably the function to use...) 
+    (for [[group posts] groups :when (or (nil? group-key) group)]
+      (index-page index group (sort-by (:order index) posts))
+      )))
+
+(defn- get-index-path
+  "Generates an index path (and strips leading slash)"
+  [index group]
+  (subs
+    (str (clojure.java.io/file (:path index) (or group "") "index.html"))
+    1
+    ))
 
 (defn- index-page
   "Function that takes a list of posts and generates an index page
    using them."
   [index group posts]
-  {:dest-path (str (clojure.java.io/file (:path index) (or group "") "index.html"))
+  {:dest-path (get-index-path index group)
    ; TODO: may need to add in sitewide title here
    :title (string/replace (:title index) "%s" (str group))
    :posts (map posts/get-render-context posts)

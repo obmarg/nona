@@ -78,7 +78,7 @@
         :path "/blog/"
         :layout ...layout...}
        "tech"
-       ...posts...) => {:dest-path "/blog/tech/index.html"
+       ...posts...) => {:dest-path "blog/tech/index.html"
                         :title "Title: tech"
                         :posts ...posts...
                         :layout ...layout...}
@@ -90,10 +90,11 @@
         :path ""
         :layout ...layout...}
        nil
-       ...posts...) => {:dest-path "/index.html"
+       ...posts...) => {:dest-path "index.html"
                         :title "Archives"
                         :posts ...posts...
                         :layout ...layout...}
   )
 
 ; TODO: Write tests of page-from-post
+; TODO: Write tests of get-index-path
