@@ -13,28 +13,18 @@
 (defn make-template-context
   "Takes some variables, and makes a context suitable for passing in to a
    template"
-  [config indexes page posts]
+  [config indexes page]
   ; TODO: could probably put some preconditions on this function
-  ; TODO: also want to decide on the argument list, not sure this is
-  ;       the best...
   {:config config
    :indexes indexes
    :page page
-   :posts posts}
-  )
+   })
 
-; TODO: Need to strip out transform-data from here
-(defn render-page
-  "Takes a page, returns a rendered string"
-  [templates page]
-  (let [layout (get-in page [:metadata :layout] (get-config :default-layout))
-        template (templates layout)]
-    (->> page
-         transform-data
-         (assoc page :content)
-         template
-         (apply str)
-         )))
+(defn render
+  "Renders a context using a template, returns a string"
+  [template context]
+  (->> context template (apply str))
+  )
 
 ;
 ; Templating functions
@@ -67,9 +57,9 @@
         snippet (create-snippet template snippet)]
     (html/template 
       template
-      [page]
-      [:#title] (html/content (:name page))
-      [insertpoint] (html/content (snippet page))
+      [context]
+      [:#title] (html/content (:name context))
+      [insertpoint] (html/content (snippet context))
       )))
 
 (def ^:private data-each-regexp #"^data-each-.*")

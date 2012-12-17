@@ -75,19 +75,25 @@
   "index-page generates grouped pages ok"
   (@#'nona.core/index-page 
        {:title "Title: %s"
-        :path "/blog/"}
+        :path "/blog/"
+        :layout ...layout...}
        "tech"
-       ...posts...) => {:dest-path "/blog/techindex.html"
+       ...posts...) => {:dest-path "/blog/tech/index.html"
                         :title "Title: tech"
-                        :posts ...posts...}
+                        :posts ...posts...
+                        :layout ...layout...}
   )
 (fact
   "index-page generates non-grouped pages ok"
   (@#'nona.core/index-page 
        {:title "Archives"
-        :path ""}
+        :path ""
+        :layout ...layout...}
        nil
-       ...posts...) => {:dest-path "index.html"
+       ...posts...) => {:dest-path "/index.html"
                         :title "Archives"
-                        :posts ...posts...}
+                        :posts ...posts...
+                        :layout ...layout...}
   )
+
+; TODO: Write tests of page-from-post

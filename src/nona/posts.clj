@@ -18,7 +18,7 @@
         rel-path (relative-path file)
         [metadata data] (split-metadata contents)]
     {:name name 
-     :content (transform-data data)
+     :content (transform-data extension data)
      :src-path rel-path
      :metadata (merge (filename-metadata name) metadata)
      }))
@@ -28,6 +28,14 @@
    Suitable for adding to a page before rendering"
   [post]
   (merge (:metadata post) {:content (:content post)})
+  )
+
+(defn get-dest-path
+  "Gets a destination path for a post."
+  [post]
+  ; TODO: Finish this off, this is just placeholder really
+  ;       (also write some tests)
+  (str (:name post) ".html")
   )
 
 ;

@@ -8,7 +8,8 @@
  split-data load-source-file relative-path 
  replace-extension add-dest-path get-template-file)
 
-(defn load-source-files
+(defn get-source-files
+  "Returns a sequence of source files"
   [path]
   (fs/with-cwd 
     (fs/file (get-config :base-dir) path)
@@ -16,9 +17,16 @@
          fs/file
          file-seq
          (remove fs/directory?)
-         (map load-source-file)
-         set
          )))
+
+(defn load-files
+  "Takes a sequence of files, returns a sequence of
+   [file contents] pairs"
+  [files]
+  (for [file files] [file (slurp file)])
+  )
+
+(def load-source-files (comp load-files get-source-files))
 
 (defn save-dest-file
   [name content]
@@ -36,23 +44,6 @@
    (get-config :templates-dir) 
    filename)
   )
-
-(defn- load-source-file
-  [file]
-  (let [[name extension] (fs/split-ext file)
-        rel-path (relative-path file)
-        dest-path (io/file (fs/parent rel-path) (str name ".html"))
-        file-data (slurp file)
-        [metadata data] (split-data file-data)]
-    ; TODO: Need to remove all this stuff and have it map to nona.posts
-    {:name name 
-     :ext extension
-     :src-path (relative-path file)
-     :dest-path (relative-path dest-path)
-     :metadata metadata
-     :data data
-     }
-   ))
 
 (defn relative-path
   "Calculates a relative path"
