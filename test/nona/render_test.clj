@@ -55,27 +55,6 @@
 ; TODO: Write tests of render-page
 
 ;
-; get-page-data tests
-;
-
-(fact
-  "get-page-data should handle page.content"
-  (@#'nona.render/get-page-data test-page [:page :content]) => '("Something")
-  )
-(fact
-  "get-page-data should handle page.layout"
-  (@#'nona.render/get-page-data test-page [:page :layout]) => "layout"
-  )
-(fact
-  "get-page-data should return empty string for missing data"
-  (@#'nona.render/get-page-data test-page [:page :something]) => ""
-  )
-(fact
-  "get-page-data should return empty string for non page data"
-  (@#'nona.render/get-page-data test-page [:something :layout]) => ""
-  )
-
-;
 ; handle-data-text tests
 ;
 

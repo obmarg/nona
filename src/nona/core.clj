@@ -26,7 +26,6 @@
 (declare page-from-post)
 
 (defn -main
-  "I don't do a whole lot ... yet."
   [basefolder & args]
   (if (not @logging-started) (do
                                (set-logger!)

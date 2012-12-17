@@ -7,9 +7,9 @@
         [nona.config :only (get-config get-layout)])
   )
 
-(declare 
+(declare
   transform-data
-  get-template 
+  get-template
   )
 
 (defn make-template-context
@@ -33,13 +33,13 @@
 ;
 
 (declare
-  create-template 
+  create-template
   create-snippet
   attr-matches
   attr-match?
   handle-data-text
+  handle-data-content
   handle-data-each
-  get-page-data
   split-keywords
   )
 
@@ -57,11 +57,15 @@
                      files/get-template-file
                      html/html-resource)
         snippet (create-snippet template snippet)]
-    (html/template 
+    (html/template
       template
       [context]
-      [:#title] (html/content (:name context))
-      [insertpoint] (html/content (snippet context))
+      [:#title] (html/content (get-in context [:page :title]))
+      [insertpoint] (html/content
+                      (for
+                        [post (get-in context [:page :posts])]
+                        (snippet {:post post})
+                        ))
       )))
 
 (def ^:private data-each-regexp #"^data-each-.*")
@@ -70,33 +74,50 @@
   "Creates a snippet for use in templates"
   [template selector]
   (html/snippet template [selector]
-    [item]
-    [(html/attr? :data-text)] 
-      (handle-data-text (partial get-page-data item))
-    [(attr-match? data-each-regexp)] 
-      (handle-data-each (partial get-page-data item))
+    [context]
+    [(html/attr? :data-text)]
+      (handle-data-text (partial get-in context))
+    [(html/attr? :data-content)]
+      (handle-data-content (partial get-in context))
+    [(attr-match? data-each-regexp)]
+      (handle-data-each (partial get-in context))
     ))
 
-(defn- handle-data-text
-  "Returns a function that handles elements with data-text attribs
-   page-data should be a function that accepts a vec of keywords"
-  [page-data]
+(defn- replace-content-handler
+  "Returns a function that handles elements needing replaced.
+   Should be used for data-text & similar handlers
+   Params:
+      attr      The html attribute to get the keywords from
+      getter    A function that gets content to replace
+                when passed in a sequence of keywords"
+  [attr getter]
   (fn [node]
-    (let [data-text (get-in node [:attrs :data-text])
+    (let [data-text (get-in node [:attrs attr])
           keywords (split-keywords data-text)]
-      (print "in-text keywords: " keywords "\n")
+      (log/trace "in replace-handler [" attr ", " getter "]")
+      (log/trace "keywords: " keywords)
+      (log/trace "replacement: " (getter keywords))
       ; TODO: Maybe want to make it so this does nothing
       ; if page-data returns nil (and make it so it does
       ; if applicable).  This way we can avoid awkward
       ; ordering problems where the results of one
       ; transform are overwritten by another.
-      (assoc node :content (page-data keywords))
+      (assoc node :content (getter keywords))
       )))
+
+(def ^:private handle-data-text
+  (partial replace-content-handler :data-text)
+  )
+
+(defn- handle-data-content
+  [getter]
+  (replace-content-handler :data-content #(apply html/html-snippet (getter %1)))
+  )
 
 (defn- handle-data-each
   "Returns a function that handles elements with data-each-* attribs.
-   page-data should be a function that accepts a vector of keywords"
-  [page-data]
+   context should be a function that accepts a vector of keywords"
+  [context]
   (fn [node]
     ; Note: For now, this assumes there's only a single
     ; data-each on each element (and only nested one level deep)
@@ -104,41 +125,28 @@
     ; each- would really work out right anyway...
     (let [kw (first (attr-matches data-each-regexp node))
           bind-name (subs (name kw) 9)
-          items (->> [:attrs kw] 
-                     (get-in node) split-keywords page-data)]
-      (print "in-each\n")
+          items (->> [:attrs kw]
+                     (get-in node) split-keywords context)]
+      (log/trace "processing handle-data-each")
       ((html/clone-for [item items]
           [(html/attr? :data-text)]
             (handle-data-text (constantly item))
-          ) 
+          )
          node
          ))))
 
 (defn- split-keywords
   "Takes a string of . seperated words, returns a vector of keywords"
-  [s] 
+  [s]
   (vec (map keyword (split s #"\.")))
   )
-
-(defn- get-page-data
-  "Function that gets data from a page using some keywords"
-  [page keywords]
-  (cond 
-    (= (take 2 keywords) [:page :content]) (html/html-snippet (:content page))
-    (= (first keywords) :page) (get-in 
-                                 page 
-                                 (cons :metadata (subvec keywords 1))
-                                 ""
-                                 )
-    :else ""
-    ))
 
 (defn- attr-matches
   "Gets a seq of attributes that match a regular expression"
   [regexp element]
   {:pre [(instance? java.util.regex.Pattern regexp)]}
-  (->> element :attrs keys 
-       (map name) 
+  (->> element :attrs keys
+       (map name)
        (map #(re-matches regexp %))
        (remove nil?)
        (map keyword)
@@ -147,7 +155,7 @@
 (defn- attr-match?
   "Returns an enlive selector for elements with an attribute
    matching a regexp"
-  [regexp] 
+  [regexp]
   (html/pred (fn
     [element]
     (seq (attr-matches regexp element))
