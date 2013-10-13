@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]--><!DOCTYPE html>
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]--><!DOCTYPE html>
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]--><!DOCTYPE html>
+<!--[if gt IE 8]><!--><!DOCTYPE html>
+<html class="no-js"> <!--<![endif]-->
+    <head>
+        <meta charset="utf-8" />
+        <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible" />
+        <title></title>
+        <meta content="" name="description" />
+        <meta content="width=device-width" name="viewport" />
+
+        <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+
+        <link type="text/css" rel="stylesheet" href="http://fonts.googleapis.com/css?family=Ubuntu:bold" />
+        <link type="text/css" rel="stylesheet" href="http://fonts.googleapis.com/css?family=Vollkorn" />
+
+        <link href="styles/0b2a9086.main.css" rel="stylesheet" />
+        <script src="scripts/vendor/cf69c6f2.modernizr.min.js"></script>
+    </head>
+    <body>
+        <div class="container">
+            <div class="row">
+                <div class="span7">
+                    <header>
+                    <h1 class="page-header"><i class="icon-caret-left"></i><i class="icon-caret-left"></i> GramBlog <i class="icon-caret-right"></i><i class="icon-caret-right"></i></h1>
+                    </header>
+                    <section id="content"><div id="snippet">
+                            <article>
+                                <header>
+                                    <h2 data-text="post.title">Discovering Cucumber</h2>
+                                </header>
+                                <div data-content="post.content" class="post-content"><p>A few months ago I was having a browse of some of the jobs on stackoverflow careers and I came across a job posting for Amazon.  I wasn't intending on applying for the job, but I decided to have a look and see what sort of skills they were looking for.  I was a little surprised to find that there were some terms in there that I couldn't even begin to guess what they meant.  BDD? Cucumber?  What are these things?</p><p><!-- more --></p><p>Of course, living in the age of the internet, I didn't have to remain ignorant for long.  A quick Google led me to the <a href="http://en.wikipedia.org/wiki/Behavior-driven_development">Wikipedia for BDD</a> and more importantly to the web page for <a href="http://cukes.info/">cucumber</a>. After having a quick read of the examples on the main page for cucumber I was very intrigued (if you don't know what it is already, have a read for yourself).</p><p>At my work we tend to write out test specifications for a feature before we actually write any code, and then later go on to write the tests based on the test specs.  Doing things this way has never really felt right to me though.  I certainly understand the need for solid testing and can see value in having all your tests planned out before you write a drop of code; However since the specs are little more than a document describing the test code it feels a lot like I'm just duplicating information.  And duplication isn't good.</p><p>So the idea that with cucumber I can write out tests in plain English and have actual code tests run based off that is immensely appealing.</p><p>My only problem at this stage - cucumber is Ruby, and none of my projects are written in Ruby (in fact, I don't even know Ruby - but that's not really an issue).  However a lot of my recent personal projects have been web projects, and it doesn't really matter what language I test websites with, as most of the testing can be done without using actual code interfaces (or if actual interfacing is needed, it can easily be done through HTTP).  Thus, I decided to try it out for high level testing on some of my web projects.</p><p>My initial impressions are very favourable - it's incredibly simple to define tests first and it no longer feels like I'm duplicating work by writing out test specs.  I also really like the <a href="https://www.relishapp.com/rspec/rspec-expectations/docs">RSpec-Expectations</a> library that Ruby has, allowing you to write expectations out in almost English - so much better than the assertion style expectations I'm used to.</p><p>Compare <code>assertEqual(1, 2)</code> with <code>1.should eq(2)</code>.  Not the best example perhaps, but when you combine this with tools like <a href="http://jnicklas.github.com/capybara/">Capybara</a> and get to write expectations like <code>field.should have_content(text)</code> it starts to feel very powerful.  </p><p>So, after this brief experiment I'm really rather impressed with Cucumber, RSpec-Expectations and even Ruby itself - I've even found myself wishing for RSpec like functionality in all the other languages I work with (more on that in a future post).  Hopefully in the future I can find a way to integrate Cucumber or a similar tool into the development processes at work, and finally do away with redundant test specs.</p><pre><code>
+this.something = somethingElse('hello', 'blah');
+this.something = somethingElse('hello', 'blah');
+this.something = somethingElse('hello', 'blah');
+</code></pre></div>
+                            </article>
+                        </div></section>
+                </div>
+                <div class="well well-small span2 clearfix">
+                    <div style="text-align:right;" class="pull-right">
+                        <h4 style="margin-top: 0;">Graeme Coupar</h4>
+                        <a href="#" class="profile-link"><i class="icon-facebook icon-large"></i></a> 
+                        <a href="#" class="profile-link"><i class="icon-twitter icon-large"></i></a> 
+                        <a href="#" class="profile-link"><i class="icon-github icon-large"></i></a> 
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--[if lt IE 7]>
+            <p class="chromeframe">You are using an outdated browser. <a href="http://browsehappy.com/">Upgrade your browser today</a> or <a href="http://www.google.com/chromeframe/?redirect=true">install Google Chrome Frame</a> to better experience this site.</p>
+        <![endif]-->
+
+        <!-- Add your site or application content here -->
+
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.0/jquery.min.js"></script>
+        <script>window.jQuery || document.write('<script src="scripts/vendor/8bc61845.jquery.min.js"><\/script>')</script>
+
+
+
+        <!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->
+        <script>
+            var _gaq=[['_setAccount','UA-XXXXX-X'],['_trackPageview']];
+            (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
+            g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
+            s.parentNode.insertBefore(g,s)}(document,'script'));
+        </script>
+    </body>
+
+</html>

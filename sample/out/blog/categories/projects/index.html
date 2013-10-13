@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]--><!DOCTYPE html>
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]--><!DOCTYPE html>
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]--><!DOCTYPE html>
+<!--[if gt IE 8]><!--><!DOCTYPE html>
+<html class="no-js"> <!--<![endif]-->
+    <head>
+        <meta charset="utf-8" />
+        <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible" />
+        <title></title>
+        <meta content="" name="description" />
+        <meta content="width=device-width" name="viewport" />
+
+        <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+
+        <link type="text/css" rel="stylesheet" href="http://fonts.googleapis.com/css?family=Ubuntu:bold" />
+        <link type="text/css" rel="stylesheet" href="http://fonts.googleapis.com/css?family=Vollkorn" />
+
+        <link href="styles/0b2a9086.main.css" rel="stylesheet" />
+        <script src="scripts/vendor/cf69c6f2.modernizr.min.js"></script>
+    </head>
+    <body>
+        <div class="container">
+            <div class="row">
+                <div class="span7">
+                    <header>
+                    <h1 class="page-header"><i class="icon-caret-left"></i><i class="icon-caret-left"></i> GramBlog <i class="icon-caret-right"></i><i class="icon-caret-right"></i></h1>
+                    </header>
+                    <section id="content"><div id="snippet">
+                            <article>
+                                <header>
+                                    <h2 data-text="post.title">What C++11 features does my compiler support?</h2>
+                                </header>
+                                <div data-content="post.content" class="post-content"><p>I've recently become obsessed with C++11, the new standard for the C++ language, that <a href="http://akrzemi1.wordpress.com/2011/08/11/move-constructor/">massively</a> <a href="http://insanecoding.blogspot.com/2010/03/c-201x-variadic-templates.html">improves</a> certain areas of the language, and brings all kinds of <a href="http://www.georgeflanagin.com/c++11/auto.php">modern</a> <a href="http://www.softwarequalityconnection.com/2011/06/the-biggest-changes-in-c11-and-why-you-should-care/">features</a> that <a href="http://www.python.org/">other</a> <a href="http://en.wikipedia.org/wiki/C_Sharp_%28programming_language%29">languages</a> have enjoyed for ages.  At present C++11 support is a bit patchy - no one compiler supports all of the standard, and most of them have chosen to implement different bits first.</p><p>When working in C++, I make use of about 3 compilers - the visual c++ 2010 compiler, and 3 different versions of GCC.  Which of course means that I've got 4 different C++11 feature sets to bear in mind.  This isn't an easy task so I regularly have to loop up the supported feature tables before I actually use a feature.  I'm also thinking about switching some of my projects over to use clang (at least on linux), which should complicate things further.</p><p><!-- more --></p><p>Looking up the feature tables is fine, but it's really not great to have to look at 2 (or 3) separate pages each time you want to use a new feature. Not to mention that cross-referencing the tables is a pain if you want to know exactly which features are available to you.  The  <a href="http://wiki.apache.org/stdcxx/C%2B%2B0xCompilerSupport">apache C++0x support</a>  table goes some way towards lessening this pain, but I feel it still leaves some room for improvement, it's still not particularly easy to cross-reference  support, or tell at a glance what's supported on your compiler version.</p><p>So, I spent a couple of nights throwing together some simple code to parse the various C++11 support tables and some code to generate a nice, easily scannable and filterable table based off the data.  I have decided to name it the  <a href="http://cpp11.grambo.me.uk">C++11 Compiler Support Matrix</a>.  It's not 100%  accurate at present (mostly due to un-machine friendly tables), but that's  something I'm looking to improve over the next few days/weeks.  It also  currently only has support for GCC, Clang and Visual Studio, but I may expand  the range in the future.</p><p>The code used to generate the website is available on <a href="https://github.com/obmarg/cpp11csm">github</a> so if anyone wants to submit a bug report or pull request then feel free.</p><p>The tables it's information are based on can be found  <a href="http://blogs.msdn.com/b/vcblog/archive/2011/09/12/10209291.aspx">here for MSVC</a> , <a href="http://gcc.gnu.org/projects/cxx0x.html">here for GCC</a> and  <a href="http://clang.llvm.org/cxx_status.html">here for Clang</a>.  Kudos to the Clang developers for making a nice easy to parse table. </p></div>
+                            </article>
+                        </div></section>
+                </div>
+                <div class="well well-small span2 clearfix">
+                    <div style="text-align:right;" class="pull-right">
+                        <h4 style="margin-top: 0;">Graeme Coupar</h4>
+                        <a href="#" class="profile-link"><i class="icon-facebook icon-large"></i></a> 
+                        <a href="#" class="profile-link"><i class="icon-twitter icon-large"></i></a> 
+                        <a href="#" class="profile-link"><i class="icon-github icon-large"></i></a> 
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--[if lt IE 7]>
+            <p class="chromeframe">You are using an outdated browser. <a href="http://browsehappy.com/">Upgrade your browser today</a> or <a href="http://www.google.com/chromeframe/?redirect=true">install Google Chrome Frame</a> to better experience this site.</p>
+        <![endif]-->
+
+        <!-- Add your site or application content here -->
+
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.0/jquery.min.js"></script>
+        <script>window.jQuery || document.write('<script src="scripts/vendor/8bc61845.jquery.min.js"><\/script>')</script>
+
+
+
+        <!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->
+        <script>
+            var _gaq=[['_setAccount','UA-XXXXX-X'],['_trackPageview']];
+            (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
+            g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
+            s.parentNode.insertBefore(g,s)}(document,'script'));
+        </script>
+    </body>
+
+</html>

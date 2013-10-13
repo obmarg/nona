@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]--><!DOCTYPE html>
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]--><!DOCTYPE html>
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]--><!DOCTYPE html>
+<!--[if gt IE 8]><!--><!DOCTYPE html>
+<html class="no-js"> <!--<![endif]-->
+    <head>
+        <meta charset="utf-8" />
+        <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible" />
+        <title></title>
+        <meta content="" name="description" />
+        <meta content="width=device-width" name="viewport" />
+
+        <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+
+        <link type="text/css" rel="stylesheet" href="http://fonts.googleapis.com/css?family=Ubuntu:bold" />
+        <link type="text/css" rel="stylesheet" href="http://fonts.googleapis.com/css?family=Vollkorn" />
+
+        <link href="styles/0b2a9086.main.css" rel="stylesheet" />
+        <script src="scripts/vendor/cf69c6f2.modernizr.min.js"></script>
+    </head>
+    <body>
+        <div class="container">
+            <div class="row">
+                <div class="span7">
+                    <header>
+                    <h1 class="page-header"><i class="icon-caret-left"></i><i class="icon-caret-left"></i> GramBlog <i class="icon-caret-right"></i><i class="icon-caret-right"></i></h1>
+                    </header>
+                    <section id="content"><div id="snippet">
+                            <article>
+                                <header>
+                                    <h2 data-text="post.title">The Importance of Consistency</h2>
+                                </header>
+                                <div data-content="post.content" class="post-content"><p>Sometime in the past couple of weeks I posted a quick tweet complaining about inconsistencies in other people's code.  I had a hard time condensing everything I wanted to say into one (or even a few) 160 character block(s), so eventually just gave up and posted a quick moan.  However I felt compelled to elaborate on my thoughts a little bit, so here I go.</p><p>Consistency. It's one of the most important, perhaps <i>the</i> most important aspect of modern software development.  Consistency in code helps other programmers (or your future self) better understand unfamiliar areas of a system.  Similar benefits can be obtained from consistent system design;  Someone unfamiliar with a particular part of a system may be able to make some assumptions about how it works based on their previous experiences.  Even a user interface benefits hugely from a consistent look, feel &amp; behaviour.</p><p>In this post, I primarily want to talk about coding consistency, though I'll maybe touch on a few other bits and pieces.</p><p><!-- more --></p><h3> What is consistency?</h3><p>There's a lot of different aspects to coding consistency - from simple things like using the same variable names to identify the same data in different parts of a system;  Larger undertakings like using consistent design patterns throughout the architecture of an application; Ensuring that broadly similar functions behave in broadly similar ways also comes into it.</p><p>The popular <a t95repeat95yourself="t95repeat95yourself" href="http://en.wikipedia.org/wiki/Don">DRY</a> principle in software development is  amongst other things enforcing consistency - if every piece of data in a system has a single representation, then    that piece of data is guaranteed to be consistent across the whole system.</p><p>So, why do I think consistency is so important?  As mentioned above it makes code easier to follow, but it doesn't end there.   If code is written in a consistent manner it makes identifying similar or duplicated functionality easier, and allows for vastly simplified refactoring.  If the patterns for using functions or classes are broadly similar then there is less need to read through (possibly non-existent) documentation.  Communicating also becomes a much easier task if everyone is speaking the same domain language.</p><p>Of course there are times when consistency might not be appropriate.  For example, you shouldn't fall in to the trap of re-using an unsuitable design pattern just because it is used elsewhere.  You know what they say about <a href="http://en.wikipedia.org/wiki/Law_of_the_instrument">hammers</a>.</p><h3> Inconsistency</h3><p>Rather than go on about consistency for another few paragraphs I'd like to go over a few examples of inconsistency, to illustrate some of the downsides of not keeping things consistent in the first place.</p><p>Firstly there's the example that inspired this blog post.</p><p>{% codeblock lang:cpp %} void CreateServiceOne( string serviceUrl, string uniqueId ) {...}</p><p>void CreateServiceTwo( string deviceId, string serviceUrl ) {…}</p><p>void DoCreate( string cameraId ) { 	CreateServiceOne( "http://blah", cameraId ); 	CreateServiceTwo( cameraId, "http://blah" ); }</p><p>{% endcodeblock %}</p><p>Obviously this isn't the exact code, but it's a rough summary of the two major problems I had with that particular piece of code.  </p><p>The first of those problems, was the name(s) of the cameraId variable - as it made it's way through several different layers of code, it went through 3 different names.  Perhaps not the biggest issue ever, but it did mean I had to spend an extra 5 minutes or so making absolutely sure that the deviceId at level 3 was indeed the same bit of data as the cameraId at level 1.</p><p>And of course the second problem was the order of the arguments to the <code>CreateServiceX</code> functions.  These functions did basically the same job with the same data, but for different services.  But for some unclear (and undocumented) reason they all took a variation of different arguments in different orders.  Again, not the biggest deal, but it resulted in a little extra effort was needed to check that the functions were in fact doing the same thing and that common functionality could be refactored out.</p><p>Now, these are fairly minor issues (probably caused by slightly rushed work, or just from a selection of different developers working in the area), but that doesn't mean that inconsistencies like this aren't a problem.</p><p>I found it quite interesting to read through <a href="http://me.veekun.com/blog/2012/04/09/php-a-fractal-of-bad-design/">eevee's massive PHP rant</a> that was going around recently.  Though I can imagine it's unpopular with a lot of PHP users, I think it has a number of good points.</p><p>Much of the article seems to be dealing with inconsistencies:  functions that take the same arguments but in different orders;  Functions that do several different things depending on several configuration values;   Operators that behave completely differently under different circumstances.  A lot of these issues are again fairly minor, but when taken as a whole they really do add up to a lot of difficulties.</p><p>Even worse in a system like PHP that is used by millions (I assume) worldwide, these inconsistencies become incredibly hard to fix.  Sure, the actual fixes are potentially fairly easy, but you run the risk of breaking thousands of websites that relied on the old inconsistent behaviour.</p><p>Now most systems are never likely to see the levels of deployment that PHP does, but that doesn't make this stuff any less important.  Even changes to an API with a single user could end up subtly broken by some "minor" change.</p><p>So, hopefully somewhere in this elongated moan I have convinced some of you of the importance of consistency.  If you already agreed with me then great, and if not please feel free to tell me why in the comments.</p></div>
+                            </article>
+                        </div><div id="snippet">
+                            <article>
+                                <header>
+                                    <h2 data-text="post.title">What C++11 features does my compiler support?</h2>
+                                </header>
+                                <div data-content="post.content" class="post-content"><p>I've recently become obsessed with C++11, the new standard for the C++ language, that <a href="http://akrzemi1.wordpress.com/2011/08/11/move-constructor/">massively</a> <a href="http://insanecoding.blogspot.com/2010/03/c-201x-variadic-templates.html">improves</a> certain areas of the language, and brings all kinds of <a href="http://www.georgeflanagin.com/c++11/auto.php">modern</a> <a href="http://www.softwarequalityconnection.com/2011/06/the-biggest-changes-in-c11-and-why-you-should-care/">features</a> that <a href="http://www.python.org/">other</a> <a href="http://en.wikipedia.org/wiki/C_Sharp_%28programming_language%29">languages</a> have enjoyed for ages.  At present C++11 support is a bit patchy - no one compiler supports all of the standard, and most of them have chosen to implement different bits first.</p><p>When working in C++, I make use of about 3 compilers - the visual c++ 2010 compiler, and 3 different versions of GCC.  Which of course means that I've got 4 different C++11 feature sets to bear in mind.  This isn't an easy task so I regularly have to loop up the supported feature tables before I actually use a feature.  I'm also thinking about switching some of my projects over to use clang (at least on linux), which should complicate things further.</p><p><!-- more --></p><p>Looking up the feature tables is fine, but it's really not great to have to look at 2 (or 3) separate pages each time you want to use a new feature. Not to mention that cross-referencing the tables is a pain if you want to know exactly which features are available to you.  The  <a href="http://wiki.apache.org/stdcxx/C%2B%2B0xCompilerSupport">apache C++0x support</a>  table goes some way towards lessening this pain, but I feel it still leaves some room for improvement, it's still not particularly easy to cross-reference  support, or tell at a glance what's supported on your compiler version.</p><p>So, I spent a couple of nights throwing together some simple code to parse the various C++11 support tables and some code to generate a nice, easily scannable and filterable table based off the data.  I have decided to name it the  <a href="http://cpp11.grambo.me.uk">C++11 Compiler Support Matrix</a>.  It's not 100%  accurate at present (mostly due to un-machine friendly tables), but that's  something I'm looking to improve over the next few days/weeks.  It also  currently only has support for GCC, Clang and Visual Studio, but I may expand  the range in the future.</p><p>The code used to generate the website is available on <a href="https://github.com/obmarg/cpp11csm">github</a> so if anyone wants to submit a bug report or pull request then feel free.</p><p>The tables it's information are based on can be found  <a href="http://blogs.msdn.com/b/vcblog/archive/2011/09/12/10209291.aspx">here for MSVC</a> , <a href="http://gcc.gnu.org/projects/cxx0x.html">here for GCC</a> and  <a href="http://clang.llvm.org/cxx_status.html">here for Clang</a>.  Kudos to the Clang developers for making a nice easy to parse table. </p></div>
+                            </article>
+                        </div><div id="snippet">
+                            <article>
+                                <header>
+                                    <h2 data-text="post.title">Adding Facebook Comments To Octopress</h2>
+                                </header>
+                                <div data-content="post.content" class="post-content"><p>Today I decided to have a go at adding comments to my blog.  Octopress comes with built in support for comments using <a href="http://disqus.com">disqus</a>, but I wanted to try and do something a little different.  Facebook comments seemed like a reasonable alternative - there's no additional login required, all posts have to be backed by a facebook profile and it's fairly easy to setup.  I also like the option to reduce visibility of comments - in this mode, comments will only be viewable by the poster, an their friends.  Sounds like a fairly good way to cut down on crap.</p><p>In an attempt to save myself a little learning time I had a look on google for a guide to setting up facebook comments on Octopress, but had no luck finding anything.  So, I'm going to walkthrough the (fairly straightforward) process here, in case anyone else wants to try it out.</p><p><!-- more --></p><p>The first thing you'll need to do, is <a href="https://developers.facebook.com/apps">register a facebook app</a> for your blog.  Once you've done this, facebook should give you an app id.  To make things easier should you need to change the app id, it's good to store this id in a variable in your octopress configuration file.  So, in _config.yml, add something like this</p><pre><code>
+yaml
+# Facebook comments
+facebook_appid: 222612811167194
+</code></pre><p>Next, you'll need to include the facebook javascript API in your page.  Assuming you're using the facebook like functionality built into octopress this has mostly been dealt with, with one slight modification needed - the default octopress code doesn't contain your app id.  So, open up <code>source/_includes/facebook_like.html</code> and update the line beginning with <code>js.src=</code> to this:</p><pre><code>
+javascript
+js.src = "//connect.facebook.net/en_US/all.js#appId={{ site.facebook_appid }}&amp;xfbml=1";
+</code></pre><p>Now that you've added the javascript API into your page, you need to add the actual comments to your pages.  Create a file <code>source/_includes/post/facebook_comments.html</code> and insert the following:</p><p>{% literal %}</p><pre><code>
+ html
+&lt;noscript&gt;Please enable JavaScript to view the comments powered by facebook&lt;/a&gt;&lt;/noscript&gt;
+&lt;div 
+  class="fb-comments" 
+  data-href="{{ site.url }}{{ page.url }}" 
+  data-num-posts="2"
+  data-width="470"
+  data-colorscheme="dark" &gt;&lt;/div&gt; 
+</code></pre> {% endliteral %}<p>You can tweak the colorscheme, width and number of posts used to your liking.  This file will not be included in your Octopress posts by default, you'll need to add it in yourself.  Octopress pages &amp; posts are built using the <code>post.html</code> and <code>page.html</code> files in <code>source/_layouts</code>.  So, open them up and add in the following after (or before) the disqus section:</p><p>{% literal %}</p><pre><code>
+{% if site.facebook_appid and page.comments == true %}
+  &lt;section&gt;
+    &lt;h1&gt;Comments&lt;/h1&gt;
+    &lt;div id="facebook_comments" aria-live="polite"&gt;
+      {% include post/facebook_comments.html %}
+    &lt;/div&gt;
+  &lt;/section&gt;
+{% endif %} 
+</code></pre> {% endliteral %}<p>That should be all you need to do to get the basic display &amp; adding of comments working, but it'd be good to enable the moderation functionality that facebook provides.  To do this, you need to list the moderators in the head of each of the pages themselves.  Octopress provides an easy way to do this in the <code>source/includes/custom/head.html</code> file.  Open it up, and add in this code:</p><p>{% literal %}</p><pre><code>
+html
+{% if site.facebook_appid %}
+&lt;meta property="fb:app_id" content="{{ site.facebook_appid }}" /&gt;
+{% endif %} 
+</code></pre> {% endliteral %}<p>This should allow moderation by any of the admin users of your facebok app.  And that's all there is to it.</p><p>Unfortunately the facebook comment feed is not themeable beyond selecting the dark/light theme, which isn't great.  Probably ok for sites using more conventional colours, but neither option goes perfectly with mine.  At this point I don't think that's a deal breaker, so I'll see how things go.</p><p>Any comments, feel free to leave them in the new comment box.</p></div>
+                            </article>
+                        </div><div id="snippet">
+                            <article>
+                                <header>
+                                    <h2 data-text="post.title">On Octopress</h2>
+                                </header>
+                                <div data-content="post.content" class="post-content"><p>So, this is a blog.  Clearly.  Currently not the most exciting of blogs, but hey - got to start somewhere.  I've chosen to host my blog using <a href="http://octopress.org">Octopress</a>, and thought I'd write a bit about my experiences with setting it up, and some of the tools I've decided to use with it.</p><p>Octopress is billed as <i>"A blogging framework for hackers"</i>, so as you might imagine is not really an ideal choice if you're looking for point and click simplicity.  Configuration and posting is entirely done through editing and creating text files, which octopress processes to generate static HTML for publishing.  Not great for anyone looking for a nice GUI to manage their blog, but also nothing overly complicated.</p><p>The text based nature of octopress also brings a number of benefits: </p><ul><li>Easy backup and version control using git</li><li>Very easy deployment via git or rsync</li><li>Next to no server load</li><li>No need to setup MySQL, PHP etc. on server<p></p></li></ul>The environment setup for octopress is brief, which is exactly what you want - a few commands and you're up and running.  Unfortunately one of those commands involves compiling ruby.  This doesn't add difficulty, as all the usual configure/make/make install is handled behind the scenes for you. However it does add a bit more time than I'd have liked. On the slow atom processor in my server, it probably took about 20 minutes to compile - hardly ideal for an impulsive test of some software.<p>After the initial environment setup it's just a case of cloning the octopress git repository, and changing a few configuration and theming files to your liking.</p><p>By default octopress uses <a href="http://en.wikipedia.org/wiki/Markdown">Markdown</a> for formatting, so I've chosen to use <a href="http://code52.org/DownmarkerWPF/">MarkPad</a> for editing my blog files.  MarkPad is a nice simple open source WYSIWYG editor for markdown.  It also seems to support jekyll format files, which are used behind the scenes by octopress.  It's not entirely suited to using with octopress - it doesn't seem to generate the same file names as octopress expects, and the date format in the headers is different, however I'm planning on looking into ways to improve that.</p><p>All in all I'm quite happy with octopress for now, hopefully I actually find enough topics to write about that I'll use it regularly.</p></div>
+                            </article>
+                        </div></section>
+                </div>
+                <div class="well well-small span2 clearfix">
+                    <div style="text-align:right;" class="pull-right">
+                        <h4 style="margin-top: 0;">Graeme Coupar</h4>
+                        <a href="#" class="profile-link"><i class="icon-facebook icon-large"></i></a> 
+                        <a href="#" class="profile-link"><i class="icon-twitter icon-large"></i></a> 
+                        <a href="#" class="profile-link"><i class="icon-github icon-large"></i></a> 
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--[if lt IE 7]>
+            <p class="chromeframe">You are using an outdated browser. <a href="http://browsehappy.com/">Upgrade your browser today</a> or <a href="http://www.google.com/chromeframe/?redirect=true">install Google Chrome Frame</a> to better experience this site.</p>
+        <![endif]-->
+
+        <!-- Add your site or application content here -->
+
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.0/jquery.min.js"></script>
+        <script>window.jQuery || document.write('<script src="scripts/vendor/8bc61845.jquery.min.js"><\/script>')</script>
+
+
+
+        <!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->
+        <script>
+            var _gaq=[['_setAccount','UA-XXXXX-X'],['_trackPageview']];
+            (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
+            g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
+            s.parentNode.insertBefore(g,s)}(document,'script'));
+        </script>
+    </body>
+
+</html>

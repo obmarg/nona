@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]--><!DOCTYPE html>
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]--><!DOCTYPE html>
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]--><!DOCTYPE html>
+<!--[if gt IE 8]><!--><!DOCTYPE html>
+<html class="no-js"> <!--<![endif]-->
+    <head>
+        <meta charset="utf-8" />
+        <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible" />
+        <title></title>
+        <meta content="" name="description" />
+        <meta content="width=device-width" name="viewport" />
+
+        <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+
+        <link type="text/css" rel="stylesheet" href="http://fonts.googleapis.com/css?family=Ubuntu:bold" />
+        <link type="text/css" rel="stylesheet" href="http://fonts.googleapis.com/css?family=Vollkorn" />
+
+        <link href="styles/0b2a9086.main.css" rel="stylesheet" />
+        <script src="scripts/vendor/cf69c6f2.modernizr.min.js"></script>
+    </head>
+    <body>
+        <div class="container">
+            <div class="row">
+                <div class="span7">
+                    <header>
+                    <h1 class="page-header"><i class="icon-caret-left"></i><i class="icon-caret-left"></i> GramBlog <i class="icon-caret-right"></i><i class="icon-caret-right"></i></h1>
+                    </header>
+                    <section id="content"><div id="snippet">
+                            <article>
+                                <header>
+                                    <h2 data-text="post.title">The Importance of Consistency</h2>
+                                </header>
+                                <div data-content="post.content" class="post-content"><p>Sometime in the past couple of weeks I posted a quick tweet complaining about inconsistencies in other people's code.  I had a hard time condensing everything I wanted to say into one (or even a few) 160 character block(s), so eventually just gave up and posted a quick moan.  However I felt compelled to elaborate on my thoughts a little bit, so here I go.</p><p>Consistency. It's one of the most important, perhaps <i>the</i> most important aspect of modern software development.  Consistency in code helps other programmers (or your future self) better understand unfamiliar areas of a system.  Similar benefits can be obtained from consistent system design;  Someone unfamiliar with a particular part of a system may be able to make some assumptions about how it works based on their previous experiences.  Even a user interface benefits hugely from a consistent look, feel &amp; behaviour.</p><p>In this post, I primarily want to talk about coding consistency, though I'll maybe touch on a few other bits and pieces.</p><p><!-- more --></p><h3> What is consistency?</h3><p>There's a lot of different aspects to coding consistency - from simple things like using the same variable names to identify the same data in different parts of a system;  Larger undertakings like using consistent design patterns throughout the architecture of an application; Ensuring that broadly similar functions behave in broadly similar ways also comes into it.</p><p>The popular <a t95repeat95yourself="t95repeat95yourself" href="http://en.wikipedia.org/wiki/Don">DRY</a> principle in software development is  amongst other things enforcing consistency - if every piece of data in a system has a single representation, then    that piece of data is guaranteed to be consistent across the whole system.</p><p>So, why do I think consistency is so important?  As mentioned above it makes code easier to follow, but it doesn't end there.   If code is written in a consistent manner it makes identifying similar or duplicated functionality easier, and allows for vastly simplified refactoring.  If the patterns for using functions or classes are broadly similar then there is less need to read through (possibly non-existent) documentation.  Communicating also becomes a much easier task if everyone is speaking the same domain language.</p><p>Of course there are times when consistency might not be appropriate.  For example, you shouldn't fall in to the trap of re-using an unsuitable design pattern just because it is used elsewhere.  You know what they say about <a href="http://en.wikipedia.org/wiki/Law_of_the_instrument">hammers</a>.</p><h3> Inconsistency</h3><p>Rather than go on about consistency for another few paragraphs I'd like to go over a few examples of inconsistency, to illustrate some of the downsides of not keeping things consistent in the first place.</p><p>Firstly there's the example that inspired this blog post.</p><p>{% codeblock lang:cpp %} void CreateServiceOne( string serviceUrl, string uniqueId ) {...}</p><p>void CreateServiceTwo( string deviceId, string serviceUrl ) {…}</p><p>void DoCreate( string cameraId ) { 	CreateServiceOne( "http://blah", cameraId ); 	CreateServiceTwo( cameraId, "http://blah" ); }</p><p>{% endcodeblock %}</p><p>Obviously this isn't the exact code, but it's a rough summary of the two major problems I had with that particular piece of code.  </p><p>The first of those problems, was the name(s) of the cameraId variable - as it made it's way through several different layers of code, it went through 3 different names.  Perhaps not the biggest issue ever, but it did mean I had to spend an extra 5 minutes or so making absolutely sure that the deviceId at level 3 was indeed the same bit of data as the cameraId at level 1.</p><p>And of course the second problem was the order of the arguments to the <code>CreateServiceX</code> functions.  These functions did basically the same job with the same data, but for different services.  But for some unclear (and undocumented) reason they all took a variation of different arguments in different orders.  Again, not the biggest deal, but it resulted in a little extra effort was needed to check that the functions were in fact doing the same thing and that common functionality could be refactored out.</p><p>Now, these are fairly minor issues (probably caused by slightly rushed work, or just from a selection of different developers working in the area), but that doesn't mean that inconsistencies like this aren't a problem.</p><p>I found it quite interesting to read through <a href="http://me.veekun.com/blog/2012/04/09/php-a-fractal-of-bad-design/">eevee's massive PHP rant</a> that was going around recently.  Though I can imagine it's unpopular with a lot of PHP users, I think it has a number of good points.</p><p>Much of the article seems to be dealing with inconsistencies:  functions that take the same arguments but in different orders;  Functions that do several different things depending on several configuration values;   Operators that behave completely differently under different circumstances.  A lot of these issues are again fairly minor, but when taken as a whole they really do add up to a lot of difficulties.</p><p>Even worse in a system like PHP that is used by millions (I assume) worldwide, these inconsistencies become incredibly hard to fix.  Sure, the actual fixes are potentially fairly easy, but you run the risk of breaking thousands of websites that relied on the old inconsistent behaviour.</p><p>Now most systems are never likely to see the levels of deployment that PHP does, but that doesn't make this stuff any less important.  Even changes to an API with a single user could end up subtly broken by some "minor" change.</p><p>So, hopefully somewhere in this elongated moan I have convinced some of you of the importance of consistency.  If you already agreed with me then great, and if not please feel free to tell me why in the comments.</p></div>
+                            </article>
+                        </div></section>
+                </div>
+                <div class="well well-small span2 clearfix">
+                    <div style="text-align:right;" class="pull-right">
+                        <h4 style="margin-top: 0;">Graeme Coupar</h4>
+                        <a href="#" class="profile-link"><i class="icon-facebook icon-large"></i></a> 
+                        <a href="#" class="profile-link"><i class="icon-twitter icon-large"></i></a> 
+                        <a href="#" class="profile-link"><i class="icon-github icon-large"></i></a> 
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--[if lt IE 7]>
+            <p class="chromeframe">You are using an outdated browser. <a href="http://browsehappy.com/">Upgrade your browser today</a> or <a href="http://www.google.com/chromeframe/?redirect=true">install Google Chrome Frame</a> to better experience this site.</p>
+        <![endif]-->
+
+        <!-- Add your site or application content here -->
+
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.0/jquery.min.js"></script>
+        <script>window.jQuery || document.write('<script src="scripts/vendor/8bc61845.jquery.min.js"><\/script>')</script>
+
+
+
+        <!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->
+        <script>
+            var _gaq=[['_setAccount','UA-XXXXX-X'],['_trackPageview']];
+            (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
+            g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
+            s.parentNode.insertBefore(g,s)}(document,'script'));
+        </script>
+    </body>
+
+</html>

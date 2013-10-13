@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]--><!DOCTYPE html>
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]--><!DOCTYPE html>
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]--><!DOCTYPE html>
+<!--[if gt IE 8]><!--><!DOCTYPE html>
+<html class="no-js"> <!--<![endif]-->
+    <head>
+        <meta charset="utf-8" />
+        <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible" />
+        <title></title>
+        <meta content="" name="description" />
+        <meta content="width=device-width" name="viewport" />
+
+        <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+
+        <link type="text/css" rel="stylesheet" href="http://fonts.googleapis.com/css?family=Ubuntu:bold" />
+        <link type="text/css" rel="stylesheet" href="http://fonts.googleapis.com/css?family=Vollkorn" />
+
+        <link href="styles/0b2a9086.main.css" rel="stylesheet" />
+        <script src="scripts/vendor/cf69c6f2.modernizr.min.js"></script>
+    </head>
+    <body>
+        <div class="container">
+            <div class="row">
+                <div class="span7">
+                    <header>
+                    <h1 class="page-header"><i class="icon-caret-left"></i><i class="icon-caret-left"></i> GramBlog <i class="icon-caret-right"></i><i class="icon-caret-right"></i></h1>
+                    </header>
+                    <section id="content"><div id="snippet">
+                            <article>
+                                <header>
+                                    <h2 data-text="post.title">Adding Facebook Comments To Octopress</h2>
+                                </header>
+                                <div data-content="post.content" class="post-content"><p>Today I decided to have a go at adding comments to my blog.  Octopress comes with built in support for comments using <a href="http://disqus.com">disqus</a>, but I wanted to try and do something a little different.  Facebook comments seemed like a reasonable alternative - there's no additional login required, all posts have to be backed by a facebook profile and it's fairly easy to setup.  I also like the option to reduce visibility of comments - in this mode, comments will only be viewable by the poster, an their friends.  Sounds like a fairly good way to cut down on crap.</p><p>In an attempt to save myself a little learning time I had a look on google for a guide to setting up facebook comments on Octopress, but had no luck finding anything.  So, I'm going to walkthrough the (fairly straightforward) process here, in case anyone else wants to try it out.</p><p><!-- more --></p><p>The first thing you'll need to do, is <a href="https://developers.facebook.com/apps">register a facebook app</a> for your blog.  Once you've done this, facebook should give you an app id.  To make things easier should you need to change the app id, it's good to store this id in a variable in your octopress configuration file.  So, in _config.yml, add something like this</p><pre><code>
+yaml
+# Facebook comments
+facebook_appid: 222612811167194
+</code></pre><p>Next, you'll need to include the facebook javascript API in your page.  Assuming you're using the facebook like functionality built into octopress this has mostly been dealt with, with one slight modification needed - the default octopress code doesn't contain your app id.  So, open up <code>source/_includes/facebook_like.html</code> and update the line beginning with <code>js.src=</code> to this:</p><pre><code>
+javascript
+js.src = "//connect.facebook.net/en_US/all.js#appId={{ site.facebook_appid }}&amp;xfbml=1";
+</code></pre><p>Now that you've added the javascript API into your page, you need to add the actual comments to your pages.  Create a file <code>source/_includes/post/facebook_comments.html</code> and insert the following:</p><p>{% literal %}</p><pre><code>
+ html
+&lt;noscript&gt;Please enable JavaScript to view the comments powered by facebook&lt;/a&gt;&lt;/noscript&gt;
+&lt;div 
+  class="fb-comments" 
+  data-href="{{ site.url }}{{ page.url }}" 
+  data-num-posts="2"
+  data-width="470"
+  data-colorscheme="dark" &gt;&lt;/div&gt; 
+</code></pre> {% endliteral %}<p>You can tweak the colorscheme, width and number of posts used to your liking.  This file will not be included in your Octopress posts by default, you'll need to add it in yourself.  Octopress pages &amp; posts are built using the <code>post.html</code> and <code>page.html</code> files in <code>source/_layouts</code>.  So, open them up and add in the following after (or before) the disqus section:</p><p>{% literal %}</p><pre><code>
+{% if site.facebook_appid and page.comments == true %}
+  &lt;section&gt;
+    &lt;h1&gt;Comments&lt;/h1&gt;
+    &lt;div id="facebook_comments" aria-live="polite"&gt;
+      {% include post/facebook_comments.html %}
+    &lt;/div&gt;
+  &lt;/section&gt;
+{% endif %} 
+</code></pre> {% endliteral %}<p>That should be all you need to do to get the basic display &amp; adding of comments working, but it'd be good to enable the moderation functionality that facebook provides.  To do this, you need to list the moderators in the head of each of the pages themselves.  Octopress provides an easy way to do this in the <code>source/includes/custom/head.html</code> file.  Open it up, and add in this code:</p><p>{% literal %}</p><pre><code>
+html
+{% if site.facebook_appid %}
+&lt;meta property="fb:app_id" content="{{ site.facebook_appid }}" /&gt;
+{% endif %} 
+</code></pre> {% endliteral %}<p>This should allow moderation by any of the admin users of your facebok app.  And that's all there is to it.</p><p>Unfortunately the facebook comment feed is not themeable beyond selecting the dark/light theme, which isn't great.  Probably ok for sites using more conventional colours, but neither option goes perfectly with mine.  At this point I don't think that's a deal breaker, so I'll see how things go.</p><p>Any comments, feel free to leave them in the new comment box.</p></div>
+                            </article>
+                        </div></section>
+                </div>
+                <div class="well well-small span2 clearfix">
+                    <div style="text-align:right;" class="pull-right">
+                        <h4 style="margin-top: 0;">Graeme Coupar</h4>
+                        <a href="#" class="profile-link"><i class="icon-facebook icon-large"></i></a> 
+                        <a href="#" class="profile-link"><i class="icon-twitter icon-large"></i></a> 
+                        <a href="#" class="profile-link"><i class="icon-github icon-large"></i></a> 
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--[if lt IE 7]>
+            <p class="chromeframe">You are using an outdated browser. <a href="http://browsehappy.com/">Upgrade your browser today</a> or <a href="http://www.google.com/chromeframe/?redirect=true">install Google Chrome Frame</a> to better experience this site.</p>
+        <![endif]-->
+
+        <!-- Add your site or application content here -->
+
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.0/jquery.min.js"></script>
+        <script>window.jQuery || document.write('<script src="scripts/vendor/8bc61845.jquery.min.js"><\/script>')</script>
+
+
+
+        <!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->
+        <script>
+            var _gaq=[['_setAccount','UA-XXXXX-X'],['_trackPageview']];
+            (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
+            g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
+            s.parentNode.insertBefore(g,s)}(document,'script'));
+        </script>
+    </body>
+
+</html>

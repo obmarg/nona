@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]--><!DOCTYPE html>
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]--><!DOCTYPE html>
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]--><!DOCTYPE html>
+<!--[if gt IE 8]><!--><!DOCTYPE html>
+<html class="no-js"> <!--<![endif]-->
+    <head>
+        <meta charset="utf-8" />
+        <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible" />
+        <title></title>
+        <meta content="" name="description" />
+        <meta content="width=device-width" name="viewport" />
+
+        <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+
+        <link type="text/css" rel="stylesheet" href="http://fonts.googleapis.com/css?family=Ubuntu:bold" />
+        <link type="text/css" rel="stylesheet" href="http://fonts.googleapis.com/css?family=Vollkorn" />
+
+        <link href="styles/0b2a9086.main.css" rel="stylesheet" />
+        <script src="scripts/vendor/cf69c6f2.modernizr.min.js"></script>
+    </head>
+    <body>
+        <div class="container">
+            <div class="row">
+                <div class="span7">
+                    <header>
+                    <h1 class="page-header"><i class="icon-caret-left"></i><i class="icon-caret-left"></i> GramBlog <i class="icon-caret-right"></i><i class="icon-caret-right"></i></h1>
+                    </header>
+                    <section id="content"><div id="snippet">
+                            <article>
+                                <header>
+                                    <h2 data-text="post.title">On Octopress</h2>
+                                </header>
+                                <div data-content="post.content" class="post-content"><p>So, this is a blog.  Clearly.  Currently not the most exciting of blogs, but hey - got to start somewhere.  I've chosen to host my blog using <a href="http://octopress.org">Octopress</a>, and thought I'd write a bit about my experiences with setting it up, and some of the tools I've decided to use with it.</p><p>Octopress is billed as <i>"A blogging framework for hackers"</i>, so as you might imagine is not really an ideal choice if you're looking for point and click simplicity.  Configuration and posting is entirely done through editing and creating text files, which octopress processes to generate static HTML for publishing.  Not great for anyone looking for a nice GUI to manage their blog, but also nothing overly complicated.</p><p>The text based nature of octopress also brings a number of benefits: </p><ul><li>Easy backup and version control using git</li><li>Very easy deployment via git or rsync</li><li>Next to no server load</li><li>No need to setup MySQL, PHP etc. on server<p></p></li></ul>The environment setup for octopress is brief, which is exactly what you want - a few commands and you're up and running.  Unfortunately one of those commands involves compiling ruby.  This doesn't add difficulty, as all the usual configure/make/make install is handled behind the scenes for you. However it does add a bit more time than I'd have liked. On the slow atom processor in my server, it probably took about 20 minutes to compile - hardly ideal for an impulsive test of some software.<p>After the initial environment setup it's just a case of cloning the octopress git repository, and changing a few configuration and theming files to your liking.</p><p>By default octopress uses <a href="http://en.wikipedia.org/wiki/Markdown">Markdown</a> for formatting, so I've chosen to use <a href="http://code52.org/DownmarkerWPF/">MarkPad</a> for editing my blog files.  MarkPad is a nice simple open source WYSIWYG editor for markdown.  It also seems to support jekyll format files, which are used behind the scenes by octopress.  It's not entirely suited to using with octopress - it doesn't seem to generate the same file names as octopress expects, and the date format in the headers is different, however I'm planning on looking into ways to improve that.</p><p>All in all I'm quite happy with octopress for now, hopefully I actually find enough topics to write about that I'll use it regularly.</p></div>
+                            </article>
+                        </div></section>
+                </div>
+                <div class="well well-small span2 clearfix">
+                    <div style="text-align:right;" class="pull-right">
+                        <h4 style="margin-top: 0;">Graeme Coupar</h4>
+                        <a href="#" class="profile-link"><i class="icon-facebook icon-large"></i></a> 
+                        <a href="#" class="profile-link"><i class="icon-twitter icon-large"></i></a> 
+                        <a href="#" class="profile-link"><i class="icon-github icon-large"></i></a> 
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--[if lt IE 7]>
+            <p class="chromeframe">You are using an outdated browser. <a href="http://browsehappy.com/">Upgrade your browser today</a> or <a href="http://www.google.com/chromeframe/?redirect=true">install Google Chrome Frame</a> to better experience this site.</p>
+        <![endif]-->
+
+        <!-- Add your site or application content here -->
+
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.0/jquery.min.js"></script>
+        <script>window.jQuery || document.write('<script src="scripts/vendor/8bc61845.jquery.min.js"><\/script>')</script>
+
+
+
+        <!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->
+        <script>
+            var _gaq=[['_setAccount','UA-XXXXX-X'],['_trackPageview']];
+            (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
+            g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
+            s.parentNode.insertBefore(g,s)}(document,'script'));
+        </script>
+    </body>
+
+</html>

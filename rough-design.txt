@@ -1,0 +1,69 @@
+Nona should be a standalone command, run in a directory.
+
+Ideally, I want to support both octopress-style layout-files-in-repo and a
+configuration file specified template (that can be downloaded automatically,
+via git or similar.  Though actually, subrepos might be the way to do that...)
+
+Initially, a layout-files-in-repo option seems likely to be the best bet.
+
+Possible future idea:
+- As well as static-html generation, this could provide the backend for a
+  fully hosted website...
+
+
+Initial pages option:
+
+- Reads in source files, and replicates directory structure in .html files
+- Reads header (in yaml?) and uses it to populate template (only single template for now)
+
+Bit more advanced design
+------
+
+Think I need to split the rendering of the posts and the mapping to templates
+into 2 seperate phases.
+
+Rendering of posts can happen on load, and be store with the post data.
+
+"Pages" can then be built up, which contain all the top-level metadata
+(title, filename etc.) and a number of posts (maybe slightly restructured
+from their initial form to make it easier on the data-text mappings etc.)
+
+One page should be generated per post (for the post itself, obviously).
+Then "indexes" should be responsible for generating the other pages...
+
+An index takes all the posts, and spits out a number of pages ready for
+rendering.
+
+Probably want some sort of short/full render to be stored somewhere
+for the sake of indexes that won't want the whole post...
+
+RSS & atom etc. can probably be handled by adding extra indexes w/ 
+different templates...
+
+Indexes should be a map of index name -> variables
+
+Also need some sort of global settings that get merged into each
+page map before rendering.  This way, we can control twitter/github
+settings and all that pish.
+
+Some way of accessing index data from outwith an index would be good
+also (for recent posts in sidebar, getting link to category indexes etc.)
+
+Ideal template vars (or as close as possible)
+
+  page (info about the current page, title, url etc.)
+  indexes (a map of index names -> index maps )
+  config (configuration variables, i.e. github username etc.)
+  posts (always a vector, even if only one)
+
+Index vars:
+    
+  name
+  root url
+  other stuff?
+  
+  Probably want to provide a bunch of functions that operate on 
+  indexes to get data out of them, rather than manually extracting it...
+
+
+
